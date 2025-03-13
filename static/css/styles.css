@@ -1,0 +1,50 @@
+body { 
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.bg-primary {
+    background-color: #003366; /* Navy blue */
+}
+
+.text-white {
+    color: #ffffff;
+}
+
+.card {
+    border-radius: 15px;
+}
+
+.btn-primary {
+    background-color: #0066cc;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 30px;
+    transition: all 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #004c99;
+}
+
+.btn-secondary {
+    background-color: #cccccc;
+    border: none;
+    font-weight: bold;
+    font-size: 1rem;
+    padding: 10px 20px;
+    border-radius: 30px;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    background-color: #999999;
+}
+
+.list-group-item {
+    font-size: 1.2rem;
+    border: none;
+}
