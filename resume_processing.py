@@ -1,16 +1,15 @@
-import PyPDF2
+import pdfplumber
 import re
 
 def extract_text_from_pdf(pdf_path):
     """
-    Extracts text from a PDF using PyPDF2.
+    Extracts text from a PDF using pdfplumber.
     """
     try:
-        with open(pdf_path, 'rb') as file:
-            reader = PyPDF2.PdfReader(file)
+        with pdfplumber.open(pdf_path) as pdf:
             text = ""
-            for page in reader.pages:
-                text += page.extract_text()
+            for page in pdf.pages:
+                text += page.extract_text() or ""
         if not text.strip():
             print(f"Warning: No text extracted from {pdf_path}.")
         return text
