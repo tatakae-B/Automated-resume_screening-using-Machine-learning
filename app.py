@@ -1,7 +1,6 @@
 import os
 import time
 import tempfile
-import shutil
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 from model import extract_and_preprocess_resumes, vectorize_and_calculate_similarity, rank_resumes_by_similarity

@@ -1,5 +1,4 @@
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+import numpy as np
 from resume_processing import extract_text_from_pdf, preprocess_text
 
 def extract_and_preprocess_resumes(resume_paths):
@@ -29,10 +28,46 @@ def extract_and_preprocess_resumes(resume_paths):
 
     return resumes
 
+def calculate_tfidf_similarity(resume_texts, job_description):
+    """
+    Calculate similarity using simple keyword matching and term frequency.
+    Lightweight alternative to scikit-learn's TfidfVectorizer.
+    """
+    # Tokenize all texts
+    def tokenize(text):
+        return set(text.lower().split())
+    
+    job_tokens = tokenize(job_description)
+    
+    similarity_scores = []
+    for resume_text in resume_texts:
+        resume_tokens = tokenize(resume_text)
+        
+        # Calculate Jaccard similarity
+        if len(job_tokens | resume_tokens) == 0:
+            similarity = 0.0
+        else:
+            intersection = len(job_tokens & resume_tokens)
+            union = len(job_tokens | resume_tokens)
+            similarity = intersection / union
+        
+        # Also calculate term frequency overlap
+        resume_word_count = len(resume_tokens)
+        if resume_word_count > 0:
+            matching_words = len(job_tokens & resume_tokens)
+            tf_score = matching_words / resume_word_count
+            # Combine both metrics
+            combined_score = (similarity + tf_score) / 2
+        else:
+            combined_score = similarity
+        
+        similarity_scores.append(combined_score)
+    
+    return similarity_scores
+
 def vectorize_and_calculate_similarity(resumes, job_description):
     """
-    Vectorizes resumes and job description, then calculates similarity scores.
-    Uses less restrictive parameters for TF-IDF.
+    Calculates similarity scores using lightweight keyword matching.
     """
     job_desc_processed = preprocess_text(job_description)
     if not job_desc_processed.strip():
@@ -42,18 +77,9 @@ def vectorize_and_calculate_similarity(resumes, job_description):
     if not resume_texts:
         raise ValueError("No valid resumes to process.")
 
-    all_text = resume_texts + [job_desc_processed]
-
-    # Adjust vectorizer for flexibility
-    vectorizer = TfidfVectorizer(max_df=1.0, min_df=1, stop_words=None, ngram_range=(1, 2), use_idf=False)
-    tfidf_matrix = vectorizer.fit_transform(all_text)
-
-    # Debugging: Print TF-IDF features
-    print("TF-IDF Feature Names:", vectorizer.get_feature_names_out())
-
-    # Calculate cosine similarities
-    cosine_similarities = cosine_similarity(tfidf_matrix[-1], tfidf_matrix[:-1])
-    similarity_percentages = [round(score * 100, 2) for score in cosine_similarities.flatten()]
+    # Calculate similarity scores
+    similarity_scores = calculate_tfidf_similarity(resume_texts, job_desc_processed)
+    similarity_percentages = [round(score * 100, 2) for score in similarity_scores]
 
     # Debugging: Print similarity scores
     for i, score in enumerate(similarity_percentages):
