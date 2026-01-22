@@ -1,0 +1,10 @@
+uploads/
+resumes/
+__pycache__/
+.git/
+.gitattributes
+*.pyc
+.env
+.env.local
+node_modules/
+.DS_Store

@@ -1,15 +1,16 @@
-import fitz  # PyMuPDF
+import PyPDF2
 import re
 
 def extract_text_from_pdf(pdf_path):
     """
-    Extracts text from a PDF using PyMuPDF.
+    Extracts text from a PDF using PyPDF2.
     """
     try:
-        with fitz.open(pdf_path) as doc:
+        with open(pdf_path, 'rb') as file:
+            reader = PyPDF2.PdfReader(file)
             text = ""
-            for page in doc:
-                text += page.get_text()
+            for page in reader.pages:
+                text += page.extract_text()
         if not text.strip():
             print(f"Warning: No text extracted from {pdf_path}.")
         return text

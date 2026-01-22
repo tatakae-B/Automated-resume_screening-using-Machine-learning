@@ -1,14 +1,17 @@
 import os
 import time
+import tempfile
+import shutil
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 from model import extract_and_preprocess_resumes, vectorize_and_calculate_similarity, rank_resumes_by_similarity
 
 app = Flask(__name__)
 
-# Upload folder configuration
-UPLOAD_FOLDER = 'uploads'
+# Upload folder configuration - use temp directory for Vercel
+UPLOAD_FOLDER = os.environ.get('UPLOAD_FOLDER', tempfile.gettempdir())
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['MAX_CONTENT_LENGTH'] = 50 * 1024 * 1024  # 50MB max
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 @app.route('/', methods=['GET', 'POST'])
@@ -53,4 +56,5 @@ def index():
     return render_template('index.html')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    debug = os.environ.get('FLASK_ENV') == 'development'
+    app.run(debug=debug, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
