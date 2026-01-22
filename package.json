@@ -1,0 +1,11 @@
+{
+  "name": "resume-screening",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "bash build.sh",
+    "start": "python app.py"
+  },
+  "engines": {
+    "node": "18.x"
+  }
+}

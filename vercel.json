@@ -1,6 +1,14 @@
 {
   "version": 2,
-  "buildCommand": "bash build.sh",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "**"
+      }
+    }
+  ],
   "routes": [
     {
       "src": "/(.*)",
