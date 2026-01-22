@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "buildCommand": "bash build.sh",
   "routes": [
     {
       "src": "/(.*)",
@@ -7,8 +8,6 @@
     }
   ],
   "env": {
-    "PYTHONUNBUFFERED": "1",
-    "UV_PROJECT_RESOLUTION": "skip-lock"
-  },
-  "buildCommand": "pip install -r requirements.txt"
+    "PYTHONUNBUFFERED": "1"
+  }
 }
