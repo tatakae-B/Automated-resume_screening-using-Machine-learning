@@ -8,11 +8,22 @@ import pdfplumber
 import re
 import traceback
 
-# Create Flask app with correct paths
+# Get the absolute directory paths
+CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(CURRENT_DIR)
+TEMPLATES_DIR = os.path.join(PROJECT_ROOT, 'templates')
+STATIC_DIR = os.path.join(PROJECT_ROOT, 'static')
+
+print(f"✓ CURRENT_DIR: {CURRENT_DIR}")
+print(f"✓ PROJECT_ROOT: {PROJECT_ROOT}")
+print(f"✓ TEMPLATES_DIR: {TEMPLATES_DIR}")
+print(f"✓ STATIC_DIR: {STATIC_DIR}")
+
+# Create Flask app with absolute paths
 try:
     app = Flask(__name__, 
-                template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates'),
-                static_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static'))
+                template_folder=TEMPLATES_DIR,
+                static_folder=STATIC_DIR)
     print("✓ Flask app initialized successfully")
 except Exception as e:
     print(f"✗ Flask app initialization failed: {e}")
