@@ -2,15 +2,18 @@ from flask import Flask, render_template, request
 import os
 import sys
 import tempfile
+from werkzeug.utils import secure_filename
+import time
 
 # Add parent directory to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from model import extract_and_preprocess_resumes, vectorize_and_calculate_similarity, rank_resumes_by_similarity
-from werkzeug.utils import secure_filename
-import time
 
-app = Flask(__name__, template_folder='../templates', static_folder='../static')
+# Create Flask app with correct paths
+app = Flask(__name__, 
+            template_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'templates'),
+            static_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), 'static'))
 
 UPLOAD_FOLDER = tempfile.gettempdir()
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -53,5 +56,11 @@ def index():
 
     return render_template('index.html')
 
+# Handle all other routes
+@app.errorhandler(404)
+def not_found(e):
+    return index()
+
 if __name__ == '__main__':
     app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
