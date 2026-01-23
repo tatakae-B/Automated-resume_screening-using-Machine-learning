@@ -7,5 +7,8 @@ name = "resume-screening"
 version = "1.0.0"
 description = "Automated Resume Screening using Machine Learning"
 
+[project.scripts]
+app = "wsgi:app"
+
 [tool.vercel]
 runtime = "python3.11"
